@@ -9,7 +9,7 @@ define(function(require) {
     // Internal dependencies
     var ui = require("ui");
     var player = require("player");
-    log.setLevel("trace");
+    log.setLevel("info");
 
     log.trace("Starting app");
 
@@ -33,6 +33,8 @@ define(function(require) {
             log.error("Invalid arguments provided to 'search' method");
             return;
         }
+
+        ga('send', 'pageview', '/index.html?q='+query);
 
         var url = new URI("https://www.googleapis.com/youtube/v3/search")
             .query(youtubeConfig)
@@ -66,6 +68,8 @@ define(function(require) {
      */
     window.play = function(id, title) {
         log.trace("play", arguments);
+
+        ga('send', 'event', 'video', 'play', title + " (" + id +")");
 
         player.loadVideoById(id);
         player.playVideo();
