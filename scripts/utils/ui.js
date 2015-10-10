@@ -27,12 +27,14 @@ define(function(require) {
         $(selector.player).fadeIn();
     }
 
-    function setPlayerTitle(title) {
+    function setPlayerTitle(title, downloadLink) {
         log.trace("setPlayerTitle", arguments);
 
+        var $download = "<a href='" + downloadLink + "' class='download-link icon-arrow-down'></a>&nbsp;&nbsp;";
+
         $(selector.playerTitle)
-            .html(title)
-            .attr("title", title);
+            .attr("title", title)
+            .html($download + title);
     }
 
     function onSearch(fn) {

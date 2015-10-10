@@ -26,7 +26,7 @@ define(function(require) {
      * @param query
      * @param callback
      */
-    window.search = function(query, callback) {
+    var search = function(query, callback) {
         log.trace("search", arguments);
 
         if(typeof query !== "string" || typeof callback !== "function") {
@@ -66,7 +66,7 @@ define(function(require) {
      * @param id
      * @param title
      */
-    window.play = function(id, title) {
+    var play = function(id, title) {
         log.trace("play", arguments);
 
         ga('send', 'event', 'video', 'play', title + " (" + id +")");
@@ -74,9 +74,7 @@ define(function(require) {
         player.loadVideoById(id);
         player.playVideo();
 
-        var downloadLink = "<a href='http://youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v="
-            + id +"' class='download-link icon-arrow-down'></a>&nbsp;&nbsp;";
-        ui.setPlayerTitle(downloadLink + title);
+        ui.setPlayerTitle(title, "http://youtubeinmp3.com/fetch/?video=http://www.youtube.com/watch?v=" + id);
         ui.showPlayer();
     };
 
