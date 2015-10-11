@@ -14,7 +14,7 @@ define(function(require) {
     log.trace("Starting app");
 
     var youtubeConfig = {
-        key : "AIzaSyDZklGPG1Gu0lUsZ36EMrgoz_T1xd01PxY",
+        key : "AIzaSyAFM3tgJfva411_4Iln8KOyCDR1teL3W38",
         type: "video",
         part: "id,snippet",
         fields: 'items/id/videoId,items/snippet/title',
