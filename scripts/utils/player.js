@@ -20,6 +20,7 @@ define(function(require) {
 
     // Youtube player event listeners
     var interval = null;
+    var videoEndedCallbacks = [];
     ytPlayer.addEventListener("onStateChange", function(state) {
         log.trace("ytPlayer.onStateChange", arguments);
         if(state.data === YT.PlayerState.PLAYING) {
@@ -34,8 +35,23 @@ define(function(require) {
             $(selector.playBtn).show();
             clearInterval(interval);
             interval = null;
+            if(state.data === YT.PlayerState.ENDED) {
+                for(var i = 0; i < videoEndedCallbacks.length; i++) {
+                    videoEndedCallbacks[i].call(ytPlayer, ytPlayer.getVideoData()["video_id"]);
+                }
+            }
         }
     });
+
+    ytPlayer.onFinished = function(callback) {
+        log.trace("onFinished", arguments);
+
+        if(typeof callback === "function") {
+            videoEndedCallbacks.push(callback);
+        } else {
+            log.error("invalid arguments passed to 'onFinished' method")
+        }
+    };
 
     function updateTime() {
         log.trace("updateTime", arguments);

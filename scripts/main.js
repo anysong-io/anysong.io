@@ -34,7 +34,7 @@ define(function(require) {
             return;
         }
 
-        ga('send', 'pageview', '/index.html?q='+query);
+        ga('send', 'pageview', '/?q='+query);
 
         var url = new URI("https://www.googleapis.com/youtube/v3/search")
             .query(youtubeConfig)
@@ -61,6 +61,37 @@ define(function(require) {
         })
     };
 
+    var findRelated = function(videoId, callback) {
+        log.trace("findRelated", arguments);
+
+        if(typeof videoId !== "string" || typeof callback !== "function") {
+            log.error("Invalid arguments provided to 'findRelated' method");
+            return;
+        }
+
+        var url = new URI("https://www.googleapis.com/youtube/v3/search")
+            .query(youtubeConfig)
+            .addQuery("relatedToVideoId", videoId);
+        log.debug("created search url: "+url);
+
+        $.ajax({
+            url: url,
+            success: function(data) {
+                log.trace("findRelated.ajax.success", arguments);
+
+                if(!data || !data.items || data.items.length === 0) {
+                    log.debug("no results while finding related videos for: '"+videoId+"'.");
+                } else {
+                    callback(data.items[0].id.videoId, data.items[0].snippet.title);
+                }
+            },
+            error: function(jqXHR, errorType, errorMessage) {
+                log.trace("findRelated.ajax.error", arguments);
+                log.error("error while finding related videos for: '"+videoId+"'. [type="+errorType+" message="+errorMessage+"]");
+            }
+        })
+    };
+
     /**
      * Play the given youtube video
      * @param id
@@ -81,5 +112,8 @@ define(function(require) {
 
     ui.onSearch(function(query) {
         search(query, play);
-    })
+    });
+    player.onFinished(function(currentVideoId) {
+        findRelated(currentVideoId, play);
+    });
 });
