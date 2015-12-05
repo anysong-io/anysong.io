@@ -56,12 +56,12 @@ define(function(require) {
             $searchLabel = $(selector.searchLabel);
 
         $searchInput.addClass("ui-error");
-        $searchLabel.html(label);
+        $searchLabel.html(label).slideDown();
 
         setTimeout(function() {
             $searchInput.removeClass("ui-error");
-            $searchLabel.html("");
-        }, 1000);
+            $searchLabel.slideUp();
+        }, 3000);
     }
 
     return {
