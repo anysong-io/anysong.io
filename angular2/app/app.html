@@ -1,0 +1,10 @@
+<div class="head">
+    <h1>{{title}}</h1>
+    <p>{{subtitle}}</p>
+</div>
+<div class="content">
+    <search-form #form (result)="examples.hide = true; player.load($event)"></search-form>
+    <player #player></player>
+    <examples-list #examples (select)="form.query = $event; form.search()"></examples-list>
+    <div id="yt-player"></div>
+</div>
